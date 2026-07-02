@@ -1,3 +1,4 @@
+/* ── Process Steps ── */
 .process-steps {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -5,113 +6,122 @@
   position: relative;
 }
 
-/* ── Each step card ── */
+/* ── Card ── */
 .step {
   text-align: center;
-  padding: 36px 22px 28px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(18px) saturate(1.3);
-  -webkit-backdrop-filter: blur(18px) saturate(1.3);
-  border: 1px solid var(--glass-border);
+  padding: 40px 22px 32px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(20, 20, 20, 0.08);
   border-radius: var(--radius);
-  box-shadow: var(--glass-shadow);
+  box-shadow: 0 4px 24px -8px rgba(20, 20, 20, 0.08);
   position: relative;
-  z-index: 1;
-  cursor: default;
   overflow: hidden;
+  cursor: default;
+
+  /* NO opacity/transform here — fixes disappearing bug */
   transition:
-    transform    0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow   0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
-    border-color 0.45s ease,
-    background   0.45s ease;
+    transform    0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow   0.4s ease,
+    border-color 0.4s ease,
+    background   0.4s ease;
 }
 
-/* Hover lift */
 .step:hover,
 .step--active {
-  transform: translateY(-10px) scale(1.03);
-  box-shadow: 0 28px 60px -16px rgba(184, 84, 58, 0.22);
-  border-color: rgba(184, 84, 58, 0.35);
-  background: rgba(255, 255, 255, 0.85);
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px -12px rgba(184, 84, 58, 0.2);
+  border-color: rgba(184, 84, 58, 0.3);
+  background: rgba(255, 255, 255, 0.95);
 }
 
-/* ── Connector line between cards ── */
+/* ── Glow blob ── */
+.step-glow {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184, 84, 58, 0.18), transparent 70%);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+.step:hover .step-glow,
+.step--active .step-glow {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+}
+
+/* ── Connector dots ── */
 .step-connector {
   position: absolute;
-  top: 52px;
-  right: -12px;
-  width: 24px;
-  height: 2px;
-  background: repeating-linear-gradient(
-    90deg,
-    var(--accent) 0 5px,
-    transparent 5px 10px
-  );
-  z-index: 2;
-  opacity: 0.5;
-  transition: opacity 0.4s ease;
+  top: 50px;
+  right: -14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 5;
 }
-.step:hover .step-connector,
-.step--active .step-connector {
+.step-connector-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.35;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.step:hover .step-connector-dot,
+.step--active .step-connector-dot {
   opacity: 1;
+  transform: scale(1.4);
 }
 
-/* ── Icon wrapper with animated ring ── */
+/* ── Icon ── */
 .step-icon-wrap {
-  position: relative;
-  width: 64px; height: 64px;
-  margin: 0 auto 18px;
-  display: grid; place-items: center;
-}
-
-.step-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 2px solid var(--accent);
-  opacity: 0;
-  transform: scale(0.7);
-  transition:
-    opacity   0.4s ease,
-    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.step:hover .step-ring,
-.step--active .step-ring {
-  opacity: 1;
-  transform: scale(1.15);
-}
-
-.step-icon {
-  width: 56px; height: 56px;
-  border-radius: 50%;
-  background: var(--ink);
-  color: #fff;
-  display: grid; place-items: center;
-  transition:
-    background  0.4s ease,
-    transform   0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  margin: 0 auto 20px;
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
   position: relative;
   z-index: 1;
+}
+.step-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: var(--ink);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  transition:
+    background  0.4s ease,
+    transform   0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-radius 0.4s ease;
 }
 .step:hover .step-icon,
 .step--active .step-icon {
   background: var(--accent);
-  transform: rotate(-8deg) scale(1.08);
+  transform: scale(1.12) rotate(-6deg);
+  border-radius: 50%;
 }
 
-/* ── Step number ── */
+/* ── Number ── */
 .step-num {
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.28em;
   color: var(--accent);
   margin-bottom: 10px;
-  opacity: 0.7;
-  transition: opacity 0.3s;
+  position: relative;
+  z-index: 1;
+  transition: letter-spacing 0.4s ease;
 }
 .step:hover .step-num,
 .step--active .step-num {
-  opacity: 1;
+  letter-spacing: 0.36em;
 }
 
 /* ── Title ── */
@@ -119,9 +129,10 @@
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 10px;
-  letter-spacing: -0.01em;
   color: var(--ink);
-  transition: color 0.3s;
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease;
 }
 .step:hover h4,
 .step--active h4 {
@@ -133,23 +144,26 @@
   font-size: 13.5px;
   color: var(--ink-mute);
   line-height: 1.65;
-  transition: color 0.3s;
+  position: relative;
+  z-index: 1;
+  transition: color 0.3s ease;
 }
 .step:hover p,
 .step--active p {
   color: var(--ink-soft);
 }
 
-/* ── Bottom accent bar (slides up on hover) ── */
+/* ── Bottom accent bar ── */
 .step-bar {
   position: absolute;
-  bottom: 0; left: 0; right: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   height: 3px;
   background: linear-gradient(90deg, var(--accent), var(--gold));
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
-  border-radius: 0 0 var(--radius) var(--radius);
 }
 .step:hover .step-bar,
 .step--active .step-bar {
@@ -158,7 +172,9 @@
 
 /* ── Responsive ── */
 @media (max-width: 900px) {
-  .process-steps { grid-template-columns: repeat(2, 1fr); }
+  .process-steps {
+    grid-template-columns: repeat(2, 1fr);
+  }
   .step-connector { display: none; }
 }
 @media (max-width: 560px) {
