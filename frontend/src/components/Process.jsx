@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import '../styles/process.css';
 
 const steps = [
@@ -45,10 +45,53 @@ const steps = [
 ];
 
 export default function Process() {
+  const [visible, setVisible] = useState([]); // which cards are shown
+  const [dots, setDots] = useState([]);        // which connectors are animating
   const [active, setActive] = useState(null);
+  const sectionRef = useRef(null);
+  const started = useRef(false);
+
+  // Trigger sequence when section scrolls into view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !started.current) {
+          started.current = true;
+          runSequence();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const runSequence = () => {
+    // Card 0 → dots 0 → Card 1 → dots 1 → Card 2 → dots 2 → Card 3
+    // Each card: 0ms, dots after 400ms, next card after 400+600=1000ms
+    const timeline = [
+      { type: 'card', index: 0, delay: 0 },
+      { type: 'dots', index: 0, delay: 500 },
+      { type: 'card', index: 1, delay: 1100 },
+      { type: 'dots', index: 1, delay: 1600 },
+      { type: 'card', index: 2, delay: 2200 },
+      { type: 'dots', index: 2, delay: 2700 },
+      { type: 'card', index: 3, delay: 3300 },
+    ];
+
+    timeline.forEach(({ type, index, delay }) => {
+      setTimeout(() => {
+        if (type === 'card') {
+          setVisible((prev) => [...prev, index]);
+        } else {
+          setDots((prev) => [...prev, index]);
+        }
+      }, delay);
+    });
+  };
 
   return (
-    <section id="process">
+    <section id="process" ref={sectionRef}>
       <div className="container">
         <div className="section-head reveal">
           <span className="eyebrow">How We Work</span>
@@ -63,35 +106,34 @@ export default function Process() {
 
         <div className="process-steps">
           {steps.map((step, i) => (
-            <div
-              key={step.num}
-              className={`step${active === i ? ' step--active' : ''}`}
-              onMouseEnter={() => setActive(i)}
-              onMouseLeave={() => setActive(null)}
-            >
-              {/* Dotted connector — not on last card */}
-              {i < steps.length - 1 && (
-                <div className="step-connector">
-                  <div className="step-connector-dot" />
-                  <div className="step-connector-dot" />
-                  <div className="step-connector-dot" />
+            <div key={step.num} className="process-item">
+
+              {/* Card */}
+              <div
+                className={`step ${visible.includes(i) ? 'step--visible' : ''} ${active === i ? 'step--active' : ''}`}
+                onMouseEnter={() => setActive(i)}
+                onMouseLeave={() => setActive(null)}
+              >
+                <div className="step-glow" />
+
+                <div className="step-icon-wrap">
+                  <div className="step-icon">{step.icon}</div>
                 </div>
-              )}
 
-              {/* Glow blob behind card */}
-              <div className="step-glow" />
-
-              {/* Icon */}
-              <div className="step-icon-wrap">
-                <div className="step-icon">{step.icon}</div>
+                <div className="step-num">{step.num}</div>
+                <h4>{step.title}</h4>
+                <p>{step.text}</p>
+                <div className="step-bar" />
               </div>
 
-              <div className="step-num">{step.num}</div>
-              <h4>{step.title}</h4>
-              <p>{step.text}</p>
-
-              {/* Bottom bar */}
-              <div className="step-bar" />
+              {/* Animated dots connector — not after last card */}
+              {i < steps.length - 1 && (
+                <div className={`process-connector ${dots.includes(i) ? 'process-connector--visible' : ''}`}>
+                  <span className="pdot pdot--1" />
+                  <span className="pdot pdot--2" />
+                  <span className="pdot pdot--3" />
+                </div>
+              )}
             </div>
           ))}
         </div>
