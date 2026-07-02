@@ -102,7 +102,7 @@ export default function WhyUs() {
   const cards = [leftHidden, left, centerIdx, right, rightHidden];
 
   return (
-    <section>
+    <section id="whyus">
       <div className="container">
         <div className="section-head reveal">
           <span className="eyebrow">Why The Wall Story</span>
