@@ -1,0 +1,4 @@
+Drop your hero-video.mp4 file in this /public folder.
+The Hero component references it as /hero-video.mp4.
+
+If the file is missing, a warm gradient fallback shows automatically.
