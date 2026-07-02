@@ -82,7 +82,6 @@
 }
 
 /* ── Brand col ── */
-.footer-col--brand {}
 .footer-brand {
   display: flex;
   align-items: center;
