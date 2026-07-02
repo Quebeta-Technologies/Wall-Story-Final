@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import Navbar from './components/Navbar.jsx';
 import Hero from './components/Hero.jsx';
 import Marquee from './components/Marquee.jsx';
-import Services from './components/Services.jsx';
-import About from './components/About.jsx';
-import Process from './components/Process.jsx';
 import WhyUs from './components/WhyUs.jsx';
+import About from './components/About.jsx';
+import Services from './components/Services.jsx';
+import Process from './components/Process.jsx';
 import Testimonials from './components/Testimonials.jsx';
 import GalleryCarousel from './components/GalleryCarousel.jsx';
 import Contact from './components/Contact.jsx';
@@ -13,7 +13,6 @@ import Footer from './components/Footer.jsx';
 import WhatsAppFloat from './components/WhatsAppFloat.jsx';
 
 export default function App() {
-  // Reveal-on-scroll observer
   useEffect(() => {
     const io = new IntersectionObserver(
       (entries) => {
@@ -36,10 +35,10 @@ export default function App() {
       <main>
         <Hero />
         <Marquee />
-        <Services />
-        <About />
-        <Process />
         <WhyUs />
+        <About />
+        <Services />
+        <Process />
         <Testimonials />
         <GalleryCarousel />
         <Contact />
