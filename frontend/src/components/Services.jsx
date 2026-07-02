@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { fetchServices } from '../services/api.js';
 import { mockServices } from '../data/mockData.js';
 import '../styles/services.css';
@@ -13,17 +13,21 @@ export default function Services() {
       .catch(() => {});
   }, []);
 
-  const prev = () => setIndex((i) => (i - 1 + services.length) % services.length);
-  const next = () => setIndex((i) => (i + 1) % services.length);
+  const prev = useCallback(() =>
+    setIndex((i) => (i - 1 + services.length) % services.length), [services.length]);
 
-  const getVisible = () => {
-    const total = services.length;
-    const left  = (index - 1 + total) % total;
-    const right = (index + 1) % total;
-    return [left, index, right];
-  };
+  const next = useCallback(() =>
+    setIndex((i) => (i + 1) % services.length), [services.length]);
 
-  const [left, center, right] = getVisible();
+  // Autoplay every 3 seconds
+  useEffect(() => {
+    const t = setInterval(next, 3000);
+    return () => clearInterval(t);
+  }, [next]);
+
+  const total = services.length;
+  const left   = (index - 1 + total) % total;
+  const right  = (index + 1) % total;
 
   return (
     <section id="services">
@@ -41,23 +45,28 @@ export default function Services() {
         </div>
 
         <div className="svc-carousel">
-          <button className="svc-arrow svc-arrow-left" onClick={prev} aria-label="Previous">
+
+          {/* Left arrow — outside left */}
+          <button className="svc-arrow" onClick={prev} aria-label="Previous">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </button>
 
+          {/* Three visible cards */}
           <div className="svc-track">
-            <ServiceCard service={services[left]}   position="left"   onClick={prev} />
-            <ServiceCard service={services[center]} position="center" onClick={() => {}} />
-            <ServiceCard service={services[right]}  position="right"  onClick={next} />
+            <ServiceCard service={services[left]}  position="side" onClick={prev} />
+            <ServiceCard service={services[index]} position="center" />
+            <ServiceCard service={services[right]} position="side" onClick={next} />
           </div>
 
-          <button className="svc-arrow svc-arrow-right" onClick={next} aria-label="Next">
+          {/* Right arrow — outside right */}
+          <button className="svc-arrow" onClick={next} aria-label="Next">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </button>
+
         </div>
       </div>
     </section>
@@ -66,18 +75,19 @@ export default function Services() {
 
 function ServiceCard({ service, position, onClick }) {
   return (
-    <div className={`svc-card svc-card--${position}`} onClick={onClick}>
-      <div className="svc-card-inner">
-        <div className="service-num">
-          {String(service.order).padStart(2, '0')}
-        </div>
-        <h3 className="service-name">{service.name}</h3>
-        <p className="service-desc">{service.description}</p>
-        <div className="service-arrow-icon">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <path d="M5 12h14M13 5l7 7-7 7" />
-          </svg>
-        </div>
+    <div
+      className={`svc-card svc-card--${position}`}
+      onClick={onClick}
+    >
+      <div className="service-num">
+        {String(service.order).padStart(2, '0')}
+      </div>
+      <h3 className="service-name">{service.name}</h3>
+      <p className="service-desc">{service.description}</p>
+      <div className="service-arrow-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+          <path d="M5 12h14M13 5l7 7-7 7" />
+        </svg>
       </div>
     </div>
   );
