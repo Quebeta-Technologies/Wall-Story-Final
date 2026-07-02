@@ -194,9 +194,7 @@ export default function Footer() {
       <div className="footer-bottom">
         <div className="footer-bottom-inner">
           <span>© {year} {BRAND.name} · All rights reserved · Pune, Maharashtra</span>
-          <span className="footer-bottom-right">
-            Designed with ♥ for beautiful interiors
-          </span>
+          <span className="footer-bottom-right">Made With <span style={{ color: 'red' }}>❤️</span> Quebeta</span>
         </div>
       </div>
     </footer>
