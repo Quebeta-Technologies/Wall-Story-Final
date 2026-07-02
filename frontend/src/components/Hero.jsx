@@ -18,7 +18,6 @@ export default function Hero() {
             playsInline
             onError={() => setVideoError(true)}
           >
-            {/* Place your hero-video.mp4 in /public folder */}
             <source src="/hero-video.mp4" type="video/mp4" />
           </video>
         ) : (
@@ -26,27 +25,15 @@ export default function Hero() {
         )}
       </div>
 
-      <div className="hero-content reveal">
-        <span className="hero-eyebrow">Est. Interiors · Curated Craft</span>
-        <h1>
-          Every Wall
-          <br />
-          <em>Tells a Story.</em>
-        </h1>
-        <p>
-          From imported wallpapers to automated curtain tracks — we compose
-          interiors that feel considered, warm, and unmistakably yours.
-        </p>
-        <div className="hero-cta-group">
-          <a href="#services" className="btn-primary">
-            Explore Services
-            <ArrowRight />
-          </a>
-          <a href={`tel:${CONTACT.phoneRaw}`} className="btn-ghost">
-            <Phone />
-            Call Now
-          </a>
-        </div>
+      <div className="hero-cta-group">
+        <a href="#services" className="btn-primary">
+          Explore Services
+          <ArrowRight />
+        </a>
+        <a href={`tel:${CONTACT.phoneRaw}`} className="btn-ghost">
+          <Phone />
+          Call Now
+        </a>
       </div>
     </section>
   );
