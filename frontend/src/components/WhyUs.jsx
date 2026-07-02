@@ -88,27 +88,34 @@ const reasons = [
 ];
 
 export default function WhyUs() {
-  const [index, setIndex] = useState(0);
-  const VISIBLE = 3; // cards shown at once
+  const [index, setIndex]     = useState(0);
+  const [animDir, setAnimDir] = useState(null); // 'left' | 'right' | null
+  const [animKey, setAnimKey] = useState(0);    // force re-trigger animation
 
-  const prev = useCallback(() =>
-    setIndex((i) => (i - 1 + reasons.length) % reasons.length),
-  []);
+  const go = useCallback((dir) => {
+    setAnimDir(dir);
+    setAnimKey((k) => k + 1);
+    setTimeout(() => {
+      setIndex((i) =>
+        dir === 'next'
+          ? (i + 1) % reasons.length
+          : (i - 1 + reasons.length) % reasons.length
+      );
+      // keep animDir briefly so exit animation plays, then clear
+      setTimeout(() => setAnimDir(null), 50);
+    }, 120);
+  }, []);
 
-  const next = useCallback(() =>
-    setIndex((i) => (i + 1) % reasons.length),
-  []);
+  const prev = useCallback(() => go('prev'), [go]);
+  const next = useCallback(() => go('next'), [go]);
 
-  // Autoplay
   useEffect(() => {
     const t = setInterval(next, 3500);
     return () => clearInterval(t);
   }, [next]);
 
-  // Build 3 visible indices
-  const getSlice = () => {
-    return [0, 1, 2].map((offset) => (index + offset) % reasons.length);
-  };
+  const getSlice = () =>
+    [0, 1, 2].map((offset) => (index + offset) % reasons.length);
 
   const [i0, i1, i2] = getSlice();
 
@@ -121,14 +128,16 @@ export default function WhyUs() {
         </div>
 
         <div className="why-carousel">
-          {/* Left arrow */}
           <button className="why-arrow" onClick={prev} aria-label="Previous">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </button>
 
-          <div className="why-track">
+          <div
+            className={`why-track ${animDir ? `why-track--${animDir}` : ''}`}
+            key={animKey}
+          >
             {[i0, i1, i2].map((ri, pos) => (
               <WhyCard
                 key={`${ri}-${pos}`}
@@ -138,7 +147,6 @@ export default function WhyUs() {
             ))}
           </div>
 
-          {/* Right arrow */}
           <button className="why-arrow" onClick={next} aria-label="Next">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
               <path d="M5 12h14M12 5l7 7-7 7" />
@@ -146,13 +154,17 @@ export default function WhyUs() {
           </button>
         </div>
 
-        {/* Progress dots */}
         <div className="why-dots">
           {reasons.map((_, i) => (
             <button
               key={i}
               className={`why-dot ${i === index ? 'active' : ''}`}
-              onClick={() => setIndex(i)}
+              onClick={() => {
+                const dir = i > index ? 'next' : 'prev';
+                setAnimDir(dir);
+                setAnimKey((k) => k + 1);
+                setTimeout(() => { setIndex(i); setAnimDir(null); }, 120);
+              }}
               aria-label={`Go to ${i + 1}`}
             />
           ))}

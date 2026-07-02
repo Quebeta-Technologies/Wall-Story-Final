@@ -14,6 +14,23 @@
   overflow: hidden;
 }
 
+/* ── Slide-in animations ── */
+.why-track--next {
+  animation: why-slide-left 0.45s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+.why-track--prev {
+  animation: why-slide-right 0.45s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes why-slide-left {
+  0%   { transform: translateX(60px);  opacity: 0; }
+  100% { transform: translateX(0);     opacity: 1; }
+}
+@keyframes why-slide-right {
+  0%   { transform: translateX(-60px); opacity: 0; }
+  100% { transform: translateX(0);     opacity: 1; }
+}
+
 /* ── Arrows ── */
 .why-arrow {
   width: 46px; height: 46px;
@@ -53,7 +70,7 @@
     background   0.4s ease;
 }
 
-/* ── Center (highlighted) card ── */
+/* ── Center card ── */
 .why-card--center {
   transform: scale(1.04);
   box-shadow: 0 20px 50px -12px rgba(184, 84, 58, 0.18);
@@ -61,13 +78,14 @@
   background: #fff;
   z-index: 2;
 }
-.why-card--center .why-bar { transform: scaleX(1); }
+.why-card--center .why-bar  { transform: scaleX(1); }
 .why-card--center .why-icon { background: var(--accent); }
+.why-card--center h3        { color: var(--accent); }
 
 /* ── Side cards ── */
 .why-card--side {
-  opacity: 0.65;
-  transform: scale(0.95);
+  opacity: 0.6;
+  transform: scale(0.94);
 }
 .why-card--side:hover {
   opacity: 0.85;
@@ -80,8 +98,13 @@
   border-color: rgba(184, 84, 58, 0.25);
   background: #fff;
 }
-.why-card:hover .why-bar { transform: scaleX(1); }
-.why-card:hover .why-icon { background: var(--accent); }
+.why-card:hover .why-bar  { transform: scaleX(1); }
+.why-card:hover .why-icon {
+  background: var(--accent);
+  transform: rotate(-6deg) scale(1.1);
+}
+.why-card:hover h3 { color: var(--accent); }
+.why-card:hover p  { color: var(--ink-soft); }
 
 /* ── Icon ── */
 .why-icon {
@@ -93,7 +116,6 @@
   margin-bottom: 22px;
   transition: background 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.why-card:hover .why-icon { transform: rotate(-6deg) scale(1.1); }
 
 /* ── Text ── */
 .why-card h3 {
@@ -104,17 +126,14 @@
   color: var(--ink);
   transition: color 0.3s;
 }
-.why-card:hover h3 { color: var(--accent); }
-
 .why-card p {
   color: var(--ink-mute);
   font-size: 13.5px;
   line-height: 1.7;
   transition: color 0.3s;
 }
-.why-card:hover p { color: var(--ink-soft); }
 
-/* ── Bottom accent bar ── */
+/* ── Bottom bar ── */
 .why-bar {
   position: absolute;
   bottom: 0; left: 0; right: 0;
@@ -150,9 +169,8 @@
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .why-card--side:last-child { display: none; }
-  .why-card--center { transform: scale(1.02); }
 }
 @media (max-width: 600px) {
-  .why-card--side { display: none; }
-  .why-card--center { transform: scale(1); width: 85vw; }
+  .why-card--side   { display: none; }
+  .why-card--center { transform: scale(1); }
 }
