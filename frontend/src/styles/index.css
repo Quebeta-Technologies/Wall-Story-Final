@@ -60,9 +60,9 @@ body::after {
 }
 
 /* Section scaffold */
-section { padding: 110px 24px; position: relative; }
+section { padding: 60px 24px; position: relative; }
 .container { max-width: 1200px; margin: 0 auto; }
-.section-head { text-align: center; margin-bottom: 64px; }
+.section-head { text-align: center; margin-bottom: 40px; }
 
 .eyebrow {
   display: inline-block;
@@ -74,7 +74,7 @@ section { padding: 110px 24px; position: relative; }
   margin-bottom: 14px;
 }
 h2 {
-  font-size: clamp(32px, 4.5vw, 56px);
+  font-size: clamp(28px, 4vw, 50px);
   font-weight: 800;
   line-height: 1.05;
   letter-spacing: -0.02em;
@@ -83,7 +83,7 @@ h2 {
 h2 em { font-style: italic; font-weight: 300; color: var(--ink-soft); }
 .section-head p {
   max-width: 620px;
-  margin: 20px auto 0;
+  margin: 16px auto 0;
   color: var(--ink-mute);
   font-size: 15px;
   line-height: 1.7;
@@ -95,7 +95,7 @@ h2 em { font-style: italic; font-weight: 300; color: var(--ink-soft); }
   align-items: center;
   justify-content: center;
   gap: 14px;
-  margin: 22px auto;
+  margin: 16px auto;
   color: var(--accent);
 }
 .flourish::before, .flourish::after {
@@ -160,5 +160,6 @@ h2 em { font-style: italic; font-weight: 300; color: var(--ink-soft); }
   .reveal { opacity: 1; transform: none; }
 }
 @media (max-width: 900px) {
-  section { padding: 80px 20px; }
+  section { padding: 40px 20px; }
+  .section-head { margin-bottom: 28px; }
 }
