@@ -15,8 +15,7 @@ export default function Navbar() {
   return (
     <nav className={scrolled ? 'nav scrolled' : 'nav'}>
       <a href="#top" className="brand">
-        <div className="brand-mark">W</div>
-        <span>{BRAND.name}</span>
+        <img src="/logo.png" alt="The Wall Story" className="brand-logo" />
       </a>
 
       <ul className={`nav-links ${open ? 'open' : ''}`}>

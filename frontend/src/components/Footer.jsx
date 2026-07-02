@@ -2,12 +2,12 @@ import { BRAND, CONTACT } from '../data/constants.js';
 import '../styles/footer.css';
 
 const NAV = [
-  { label: 'Services',     href: '#services' },
-  { label: 'About',        href: '#about' },
-  { label: 'Process',      href: '#process' },
-  { label: 'Reviews',      href: '#testimonials' },
-  { label: 'Gallery',      href: '#gallery' },
-  { label: 'Contact',      href: '#contact' },
+  { label: 'Services',  href: '#services' },
+  { label: 'About',     href: '#about' },
+  { label: 'Process',   href: '#process' },
+  { label: 'Reviews',   href: '#testimonials' },
+  { label: 'Gallery',   href: '#gallery' },
+  { label: 'Contact',   href: '#contact' },
 ];
 
 const SERVICES = [
@@ -47,7 +47,7 @@ export default function Footer() {
               className="footer-btn-ghost"
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.5 14.4c-.3-.15-1.8-.9-2.1-1s-.5-.15-.7.15-.8 1-1 1.2-.4.2-.7.05a8.5 8.5 0 0 1-2.5-1.55 9.4 9.4 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.65s.3-.4.45-.55.2-.3.3-.5.05-.35 0-.5-.7-1.7-.95-2.3-.5-.5-.7-.5h-.6a1.15 1.15 0 0 0-.85.4 3.6 3.6 0 0 0-1.15 2.7 6.2 6.2 0 0 0 1.35 3.3 14.4 14.4 0 0 0 5.55 4.85c.75.3 1.35.5 1.8.65a4.35 4.35 0 0 0 2 .15 3.25 3.25 0 0 0 2.15-1.5 2.65 2.65 0 0 0 .2-1.5c-.05-.1-.25-.15-.55-.3zM12 2A10 10 0 0 0 2 12a9.9 9.9 0 0 0 1.35 5L2 22l5.15-1.35A10 10 0 1 0 12 2z" />
+                <path d="M17.5 14.4c-.3-.15-1.8-.9-2.1-1s-.5-.15-.7.15-.8 1-1 1.2-.4.2-.7.05a8.5 8.5 0 0 1-2.5-1.55 9.4 9.4 0 0 1-1.7-2.1c-.2-.3 0-.5.1-.65s.3-.4.45-.55.2-.3.3-.5.05-.35 0-.5-.7-1.7-.95-2.3-.5-.5-.7-.5h-.6a1.15 1.15 0 0 0-.85.4 3.6 3.6 0 0 0-1.15 2.7 6.2 6.2 0 0 0 1.35 3.3 14.4 14.4 0 0 0 5.55 4.85c.75.3 1.35.5 1.8.65a4.35 4.35 0 0 0 2 .15 3.25 3.25 0 0 0 2.15-1.5 2.65 2.65 0 0 0 .2-1.5c-.05-.1-.25-.15-.55-.3zM12 2A10 10 0 0 0 2 12a9.9 9.9 0 0 0 1.35 5L2 22l5.15-1.35A10 10 1 0 0 12 2z" />
               </svg>
               WhatsApp Us
             </a>
@@ -62,8 +62,7 @@ export default function Footer() {
           {/* Col 1 — Brand */}
           <div className="footer-col footer-col--brand">
             <div className="footer-brand">
-              <div className="footer-brand-mark">W</div>
-              <span>{BRAND.name}</span>
+              <img src="/logo.png" alt="The Wall Story" className="footer-brand-logo" />
             </div>
             <p className="footer-about">
               Pune's trusted destination for imported wallpapers, curtain fabrics,

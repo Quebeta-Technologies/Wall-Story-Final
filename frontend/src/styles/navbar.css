@@ -4,7 +4,7 @@
   left: 50%;
   transform: translateX(-50%);
   width: min(1180px, calc(100% - 32px));
-  padding: 12px 20px;
+  padding: 10px 20px;
   background: var(--glass-bg);
   backdrop-filter: blur(20px) saturate(1.4);
   -webkit-backdrop-filter: blur(20px) saturate(1.4);
@@ -17,29 +17,17 @@
   justify-content: space-between;
   transition: padding 0.3s var(--ease);
 }
-.nav.scrolled { padding: 8px 20px; }
+.nav.scrolled { padding: 6px 20px; }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  font-size: 13px;
-  text-transform: uppercase;
   text-decoration: none;
-  color: var(--ink);
 }
-.brand-mark {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: var(--ink);
-  color: var(--bg-warm);
-  display: grid; place-items: center;
-  font-family: Georgia, serif;
-  font-style: italic;
-  font-weight: 700;
-  font-size: 15px;
+.brand-logo {
+  height: 40px;
+  width: auto;
+  display: block;
 }
 
 .nav-links {
