@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { fetchGallery } from '../services/api.js';
 import { mockGallery } from '../data/mockData.js';
 import '../styles/gallery.css';
@@ -22,13 +22,23 @@ export default function GalleryCarousel() {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  const scrollBy = (dir) => {
+  const scrollBy = useCallback((dir) => {
     const el = trackRef.current;
     if (!el) return;
     const card = el.querySelector('.gallery-slide');
     const step = card ? card.getBoundingClientRect().width + 16 : 300;
-    el.scrollBy({ left: dir * step, behavior: 'smooth' });
-  };
+    const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 10;
+    if (dir === 1 && atEnd) {
+      el.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      el.scrollBy({ left: dir * step, behavior: 'smooth' });
+    }
+  }, []);
+
+  useEffect(() => {
+    const t = setInterval(() => scrollBy(1), 4000);
+    return () => clearInterval(t);
+  }, [scrollBy]);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -48,39 +58,42 @@ export default function GalleryCarousel() {
         </div>
       </div>
 
-      {!isMobile && (
-        <div className="gallery-controls">
-          <button className="gallery-arrow" onClick={() => scrollBy(-1)} aria-label="Previous">
+      <div className="gallery-track-wrapper">
+        {!isMobile && (
+          <button className="gallery-arrow gallery-arrow--left" onClick={() => scrollBy(-1)} aria-label="Previous">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </button>
-          <button className="gallery-arrow" onClick={() => scrollBy(1)} aria-label="Next">
+        )}
+
+        <div className="gallery-track" ref={trackRef}>
+          {items.map((g, i) => (
+            <button
+              className="gallery-slide reveal"
+              key={g._id || i}
+              style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.4)), url(${g.imageUrl})` }}
+              onClick={() => setLightbox(g)}
+              aria-label={`Open ${g.title}`}
+            >
+              <div className="gallery-slide-info">
+                <span className="gallery-slide-num">{String(i + 1).padStart(2, '0')}</span>
+                <div>
+                  <div className="gallery-slide-title">{g.title}</div>
+                  <div className="gallery-slide-loc">{g.location}</div>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {!isMobile && (
+          <button className="gallery-arrow gallery-arrow--right" onClick={() => scrollBy(1)} aria-label="Next">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </button>
-        </div>
-      )}
-
-      <div className="gallery-track" ref={trackRef}>
-        {items.map((g, i) => (
-          <button
-            className="gallery-slide reveal"
-            key={g._id || i}
-            style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.4)), url(${g.imageUrl})` }}
-            onClick={() => setLightbox(g)}
-            aria-label={`Open ${g.title}`}
-          >
-            <div className="gallery-slide-info">
-              <span className="gallery-slide-num">{String(i + 1).padStart(2, '0')}</span>
-              <div>
-                <div className="gallery-slide-title">{g.title}</div>
-                <div className="gallery-slide-loc">{g.location}</div>
-              </div>
-            </div>
-          </button>
-        ))}
+        )}
       </div>
 
       {lightbox && (

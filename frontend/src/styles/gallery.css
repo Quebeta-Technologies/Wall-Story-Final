@@ -1,12 +1,15 @@
 .gallery-section { padding: 110px 0; position: relative; }
 
-.gallery-controls {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 30px;
+/* ── Track wrapper with side arrows ── */
+.gallery-track-wrapper {
+  position: relative;
 }
+
 .gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
   width: 44px; height: 44px;
   border-radius: 50%;
   background: var(--glass-bg);
@@ -19,10 +22,12 @@
   color: var(--ink);
   transition: background 0.25s var(--ease), transform 0.25s var(--ease);
 }
+.gallery-arrow--left  { left: 16px; }
+.gallery-arrow--right { right: 16px; }
 .gallery-arrow:hover {
   background: var(--accent);
   color: #fff;
-  transform: scale(1.08);
+  transform: translateY(-50%) scale(1.08);
 }
 
 .gallery-track {
@@ -91,7 +96,7 @@
   opacity: 0.85;
 }
 
-/* Lightbox */
+/* ── Lightbox ── */
 .lightbox {
   position: fixed;
   inset: 0;
