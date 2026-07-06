@@ -85,7 +85,6 @@ export default function WhyUs() {
   const prev = useCallback(() => go('prev'), [go]);
   const next = useCallback(() => go('next'), [go]);
 
-  // Autoplay — all screens
   useEffect(() => {
     const t = setInterval(next, 4000);
     return () => clearInterval(t);
@@ -164,23 +163,6 @@ export default function WhyUs() {
             </button>
           )}
         </div>
-
-        {!isMobile && (
-          <div className="why-dots">
-            {reasons.map((_, i) => (
-              <button
-                key={i}
-                className={`why-dot ${i === center ? 'active' : ''}`}
-                onClick={() => {
-                  if (isAnimating || i === center) return;
-                  go(i > center ? 'next' : 'prev');
-                  setTimeout(() => setCenter(i), 710);
-                }}
-                aria-label={`Go to ${i + 1}`}
-              />
-            ))}
-          </div>
-        )}
       </div>
     </section>
   );
