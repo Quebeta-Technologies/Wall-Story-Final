@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import '../styles/why.css';
 
 const reasons = [
@@ -49,20 +49,29 @@ const reasons = [
   },
 ];
 
-// Each card has a role: 'left' | 'center' | 'right' | 'hidden-left' | 'hidden-right'
-// We render 5 cards but only show 3. The extras slide in/out.
 export default function WhyUs() {
   const [center, setCenter] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [dir, setDir] = useState(null); // 'next' | 'prev'
+  const [dir, setDir] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Touch tracking
+  const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
 
   const total = reasons.length;
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 600);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const go = useCallback((direction) => {
     if (isAnimating) return;
     setIsAnimating(true);
     setDir(direction);
-
     setTimeout(() => {
       setCenter((c) =>
         direction === 'next'
@@ -71,19 +80,37 @@ export default function WhyUs() {
       );
       setIsAnimating(false);
       setDir(null);
-    }, 700); // matches CSS transition duration
+    }, 700);
   }, [isAnimating, total]);
 
   const prev = useCallback(() => go('prev'), [go]);
   const next = useCallback(() => go('next'), [go]);
 
-  // Autoplay
+  // Autoplay — desktop only
   useEffect(() => {
+    if (isMobile) return;
     const t = setInterval(next, 4000);
     return () => clearInterval(t);
-  }, [next]);
+  }, [next, isMobile]);
 
-  // Indices for the 5 rendered cards
+  // Touch handlers
+  const onTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const onTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const dy = e.changedTouches[0].clientY - touchStartY.current;
+    // Only swipe if horizontal movement dominates
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+      dx < 0 ? next() : prev();
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
+
   const leftHidden  = (center - 2 + total) % total;
   const left        = (center - 1 + total) % total;
   const centerIdx   = center;
@@ -109,19 +136,22 @@ export default function WhyUs() {
           <h2>Details you feel, <em>not just see.</em></h2>
         </div>
 
-        <div className="why-carousel">
-          <button className="why-arrow" onClick={prev} disabled={isAnimating} aria-label="Previous">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-          </button>
+        <div
+          className="why-carousel"
+          onTouchStart={isMobile ? onTouchStart : undefined}
+          onTouchEnd={isMobile ? onTouchEnd : undefined}
+        >
+          {!isMobile && (
+            <button className="why-arrow" onClick={prev} disabled={isAnimating} aria-label="Previous">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
+            </button>
+          )}
 
           <div className={`why-track ${dir ? `why-dir-${dir}` : ''}`}>
             {cards.map((ri) => (
-              <div
-                key={ri}
-                className={`why-card why-card--${getRole(ri)}`}
-              >
+              <div key={ri} className={`why-card why-card--${getRole(ri)}`}>
                 <div className="why-icon">{reasons[ri].icon}</div>
                 <h3>{reasons[ri].title}</h3>
                 <p>{reasons[ri].text}</p>
@@ -130,28 +160,35 @@ export default function WhyUs() {
             ))}
           </div>
 
-          <button className="why-arrow" onClick={next} disabled={isAnimating} aria-label="Next">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </button>
+          {!isMobile && (
+            <button className="why-arrow" onClick={next} disabled={isAnimating} aria-label="Next">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          )}
         </div>
 
-        <div className="why-dots">
-          {reasons.map((_, i) => (
-            <button
-              key={i}
-              className={`why-dot ${i === center ? 'active' : ''}`}
-              onClick={() => {
-                if (isAnimating || i === center) return;
-                go(i > center ? 'next' : 'prev');
-                // Jump directly after animation
-                setTimeout(() => setCenter(i), 710);
-              }}
-              aria-label={`Go to ${i + 1}`}
-            />
-          ))}
-        </div>
+        {!isMobile && (
+          <div className="why-dots">
+            {reasons.map((_, i) => (
+              <button
+                key={i}
+                className={`why-dot ${i === center ? 'active' : ''}`}
+                onClick={() => {
+                  if (isAnimating || i === center) return;
+                  go(i > center ? 'next' : 'prev');
+                  setTimeout(() => setCenter(i), 710);
+                }}
+                aria-label={`Go to ${i + 1}`}
+              />
+            ))}
+          </div>
+        )}
+
+        {isMobile && (
+          <p className="why-swipe-hint">Swipe to explore →</p>
+        )}
       </div>
     </section>
   );
