@@ -11,7 +11,7 @@
 .svc-track {
   position: relative;
   flex: 1;
-  height: 420px;
+  height: 340px;
   overflow: hidden;
 }
 
@@ -84,13 +84,13 @@
 /* ── Image area ── */
 .svc-card-img {
   width: 100%;
-  height: 200px;
+  height: 160px;
   overflow: hidden;
   flex-shrink: 0;
   background: var(--cream);
 }
 .svc-card--left  .svc-card-img,
-.svc-card--right .svc-card-img { height: 160px; }
+.svc-card--right .svc-card-img { height: 130px; }
 
 .svc-card-img img {
   width: 100%;
@@ -103,7 +103,7 @@
 
 /* ── Card body ── */
 .svc-card-body {
-  padding: 22px 22px 18px;
+  padding: 18px 20px 16px;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -154,7 +154,7 @@
 
 /* ── Responsive ── */
 @media (max-width: 960px) {
-  .svc-track { height: 380px; }
+  .svc-track { height: 320px; }
   .svc-card  { width: 44%; }
   .svc-card--hidden-left  { left: -50%; }
   .svc-card--left         { left: 2%; }
@@ -166,12 +166,12 @@
 @media (max-width: 600px) {
   .svc-carousel { gap: 0; }
   .svc-track {
-    height: 380px;
+    height: 300px;
     overflow: visible;
   }
   .svc-card {
     width: 82vw;
-    height: 360px;
+    height: 280px;
     overflow: hidden;
   }
   .svc-card--hidden-left  { left: -100%; opacity: 0; pointer-events: none; }
@@ -185,7 +185,7 @@
   .svc-card--right        { left: 110%; opacity: 0; pointer-events: none; }
   .svc-card--hidden-right { left: 120%; opacity: 0; pointer-events: none; }
 
-  .svc-card-img  { height: 180px; }
+  .svc-card-img  { height: 150px; }
   .service-name  { font-size: 16px; }
   .service-desc  { font-size: 12.5px; }
 }
