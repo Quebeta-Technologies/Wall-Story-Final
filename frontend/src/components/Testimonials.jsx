@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { fetchTestimonials } from '../services/api.js';
 import { mockTestimonials } from '../data/mockData.js';
 import '../styles/testimonials.css';
@@ -6,6 +6,9 @@ import '../styles/testimonials.css';
 export default function Testimonials() {
   const [items, setItems] = useState(mockTestimonials);
   const [index, setIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
 
   useEffect(() => {
     fetchTestimonials()
@@ -13,14 +16,37 @@ export default function Testimonials() {
       .catch(() => {});
   }, []);
 
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 700);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   const next = useCallback(() => setIndex((i) => (i + 1) % items.length), [items.length]);
   const prev = useCallback(() => setIndex((i) => (i - 1 + items.length) % items.length), [items.length]);
 
-  // Autoplay
+  // Autoplay — all screens
   useEffect(() => {
     const t = setInterval(next, 6000);
     return () => clearInterval(t);
   }, [next]);
+
+  const onTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const onTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const dy = e.changedTouches[0].clientY - touchStartY.current;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+      dx < 0 ? next() : prev();
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
 
   return (
     <section id="testimonials" className="testimonials">
@@ -30,7 +56,11 @@ export default function Testimonials() {
           <h2>What clients <em>are saying.</em></h2>
         </div>
 
-        <div className="testimonial-carousel reveal">
+        <div
+          className="testimonial-carousel reveal"
+          onTouchStart={isMobile ? onTouchStart : undefined}
+          onTouchEnd={isMobile ? onTouchEnd : undefined}
+        >
           <button className="tc-arrow tc-arrow-left" onClick={prev} aria-label="Previous">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
               <path d="M19 12H5M12 19l-7-7 7-7" />
