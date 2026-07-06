@@ -7,7 +7,7 @@ const items = [
   'Blinds',
   'Wooden Flooring',
   'Automated Tracks',
-  'Artefacts',
+  'Artifacts',
   'SPC Flooring',
 ];
 
