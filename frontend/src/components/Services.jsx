@@ -56,7 +56,6 @@ export default function Services() {
   const prev = useCallback(() => go('prev'), [go]);
   const next = useCallback(() => go('next'), [go]);
 
-  // Autoplay — all screens
   useEffect(() => {
     const t = setInterval(next, 4000);
     return () => clearInterval(t);
@@ -135,11 +134,6 @@ export default function Services() {
                 <div className="svc-card-body">
                   <h3 className="service-name">{services[ri]?.name}</h3>
                   <p className="service-desc">{services[ri]?.description}</p>
-                  <div className="service-arrow-icon">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                      <path d="M5 12h14M13 5l7 7-7 7" />
-                    </svg>
-                  </div>
                 </div>
               </div>
             ))}

@@ -126,27 +126,9 @@
   color: var(--ink-mute);
   line-height: 1.6;
   flex: 1;
-  margin-bottom: 16px;
 }
 .svc-card--left  .service-desc,
 .svc-card--right .service-desc { font-size: 12px; }
-
-.service-arrow-icon {
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  background: rgba(20,20,20,0.06);
-  display: grid; place-items: center;
-  color: var(--ink);
-  align-self: flex-start;
-  transition: background 0.3s, transform 0.3s;
-}
-.svc-card--center .service-arrow-icon {
-  background: var(--accent);
-  color: #fff;
-}
-.svc-card--center:hover .service-arrow-icon {
-  transform: rotate(-45deg);
-}
 
 /* ── Arrows ── */
 .svc-arrow {
@@ -203,7 +185,7 @@
   .svc-card--right        { left: 110%; opacity: 0; pointer-events: none; }
   .svc-card--hidden-right { left: 120%; opacity: 0; pointer-events: none; }
 
-  .svc-card-img           { height: 180px; }
-  .service-name           { font-size: 16px; }
-  .service-desc           { font-size: 12.5px; }
+  .svc-card-img  { height: 180px; }
+  .service-name  { font-size: 16px; }
+  .service-desc  { font-size: 12.5px; }
 }
