@@ -55,7 +55,6 @@ export default function WhyUs() {
   const [dir, setDir] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Touch tracking
   const touchStartX = useRef(null);
   const touchStartY = useRef(null);
 
@@ -86,14 +85,12 @@ export default function WhyUs() {
   const prev = useCallback(() => go('prev'), [go]);
   const next = useCallback(() => go('next'), [go]);
 
-  // Autoplay — desktop only
+  // Autoplay — all screens
   useEffect(() => {
-    if (isMobile) return;
     const t = setInterval(next, 4000);
     return () => clearInterval(t);
-  }, [next, isMobile]);
+  }, [next]);
 
-  // Touch handlers
   const onTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
@@ -103,7 +100,6 @@ export default function WhyUs() {
     if (touchStartX.current === null) return;
     const dx = e.changedTouches[0].clientX - touchStartX.current;
     const dy = e.changedTouches[0].clientY - touchStartY.current;
-    // Only swipe if horizontal movement dominates
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
       dx < 0 ? next() : prev();
     }
@@ -184,10 +180,6 @@ export default function WhyUs() {
               />
             ))}
           </div>
-        )}
-
-        {isMobile && (
-          <p className="why-swipe-hint">Swipe to explore →</p>
         )}
       </div>
     </section>
