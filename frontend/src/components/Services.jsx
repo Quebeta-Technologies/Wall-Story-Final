@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { fetchServices } from '../services/api.js';
 import { mockServices } from '../data/mockData.js';
 import '../styles/services.css';
@@ -20,11 +20,22 @@ export default function Services() {
   const [services, setServices] = useState(mockServices);
   const [center, setCenter]     = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
 
   useEffect(() => {
     fetchServices()
       .then((data) => data && data.length && setServices(data))
       .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 600);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
   }, []);
 
   const total = services.length;
@@ -45,10 +56,27 @@ export default function Services() {
   const prev = useCallback(() => go('prev'), [go]);
   const next = useCallback(() => go('next'), [go]);
 
+  // Autoplay — all screens
   useEffect(() => {
     const t = setInterval(next, 4000);
     return () => clearInterval(t);
   }, [next]);
+
+  const onTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const onTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const dy = e.changedTouches[0].clientY - touchStartY.current;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+      dx < 0 ? next() : prev();
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
 
   const leftHidden  = (center - 2 + total) % total;
   const left        = (center - 1 + total) % total;
@@ -81,19 +109,22 @@ export default function Services() {
           <p>Every space is composed piece by piece. Here is the full range of materials, finishes and craft we bring to your home.</p>
         </div>
 
-        <div className="svc-carousel">
-          <button className="svc-arrow" onClick={prev} disabled={isAnimating} aria-label="Previous">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M19 12H5M12 19l-7-7 7-7" />
-            </svg>
-          </button>
+        <div
+          className="svc-carousel"
+          onTouchStart={isMobile ? onTouchStart : undefined}
+          onTouchEnd={isMobile ? onTouchEnd : undefined}
+        >
+          {!isMobile && (
+            <button className="svc-arrow" onClick={prev} disabled={isAnimating} aria-label="Previous">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
+            </button>
+          )}
 
           <div className="svc-track">
             {cards.map((ri) => (
-              <div
-                key={ri}
-                className={`svc-card svc-card--${getRole(ri)}`}
-              >
+              <div key={ri} className={`svc-card svc-card--${getRole(ri)}`}>
                 <div className="svc-card-img">
                   <img
                     src={SERVICE_IMAGES[ri % SERVICE_IMAGES.length]}
@@ -114,11 +145,13 @@ export default function Services() {
             ))}
           </div>
 
-          <button className="svc-arrow" onClick={next} disabled={isAnimating} aria-label="Next">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </button>
+          {!isMobile && (
+            <button className="svc-arrow" onClick={next} disabled={isAnimating} aria-label="Next">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
     </section>
