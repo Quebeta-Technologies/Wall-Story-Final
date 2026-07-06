@@ -11,7 +11,7 @@
 .why-track {
   position: relative;
   flex: 1;
-  height: 280px; /* fixed height so cards don't shift layout */
+  height: 280px;
   overflow: hidden;
 }
 
@@ -28,7 +28,6 @@
   box-shadow: 0 4px 24px -8px rgba(20, 20, 20, 0.1);
   overflow: hidden;
 
-  /* ALL positional + visual changes animate with this one rule */
   transition:
     left        0.7s cubic-bezier(0.4, 0, 0.2, 1),
     transform   0.7s cubic-bezier(0.4, 0, 0.2, 1),
@@ -40,24 +39,18 @@
 }
 
 /* ── Positions for each role ── */
-
-/* Fully off-screen left — slides in from here */
 .why-card--hidden-left {
   left: -38%;
   transform: scale(0.82);
   opacity: 0;
   z-index: 0;
 }
-
-/* Left visible card */
 .why-card--left {
   left: 0%;
   transform: scale(0.92);
   opacity: 0.55;
   z-index: 1;
 }
-
-/* Center (hero) card */
 .why-card--center {
   left: 34%;
   transform: scale(1.06);
@@ -71,15 +64,12 @@
 .why-card--center .why-icon { background: var(--accent); }
 .why-card--center h3        { color: var(--accent); }
 
-/* Right visible card */
 .why-card--right {
   left: 68%;
   transform: scale(0.92);
   opacity: 0.55;
   z-index: 1;
 }
-
-/* Fully off-screen right */
 .why-card--hidden-right {
   left: 106%;
   transform: scale(0.82);
@@ -188,7 +178,8 @@
 
 /* ── Responsive ── */
 @media (max-width: 900px) {
-  .why-track { height: 300px; }
+  .why-carousel { gap: 10px; }
+  .why-track { height: 320px; }
   .why-card  { width: 44%; }
   .why-card--hidden-left  { left: -50%; }
   .why-card--left         { left: 2%; }
@@ -198,11 +189,26 @@
 }
 
 @media (max-width: 600px) {
-  .why-track { height: 260px; }
-  .why-card  { width: 78vw; }
-  .why-card--hidden-left  { left: -90%; }
-  .why-card--left         { left: -82%; opacity: 0; }
-  .why-card--center       { left: 50%; transform: translateX(-50%) scale(1); }
+  .why-carousel { gap: 8px; }
+  .why-track {
+    height: auto;
+    min-height: 300px;
+  }
+  .why-card {
+    width: 80vw;
+    height: auto;
+    min-height: 280px;
+    position: absolute;
+    padding: 28px 20px 24px;
+  }
+  .why-card--hidden-left  { left: -95%; opacity: 0; }
+  .why-card--left         { left: -85%; opacity: 0; }
+  .why-card--center       { left: 50%; transform: translateX(-50%) scale(1); opacity: 1; }
   .why-card--right        { left: 110%; opacity: 0; }
-  .why-card--hidden-right { left: 120%; }
+  .why-card--hidden-right { left: 120%; opacity: 0; }
+
+  .why-arrow  { width: 38px; height: 38px; }
+  .why-icon   { width: 44px; height: 44px; margin-bottom: 14px; }
+  .why-card h3 { font-size: 15px; }
+  .why-card p  { font-size: 12.5px; }
 }
