@@ -1,4 +1,5 @@
 .gallery-section { padding: 110px 0; position: relative; }
+
 .gallery-controls {
   display: flex;
   justify-content: center;
@@ -145,6 +146,17 @@
 }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
 
+/* ── Mobile: 1 full-width image at a time ── */
 @media (max-width: 700px) {
-  .gallery-slide { flex-basis: 82vw; }
+  .gallery-track {
+    padding: 10px 0 30px;
+    gap: 0;
+    -webkit-mask-image: none;
+            mask-image: none;
+  }
+  .gallery-slide {
+    flex: 0 0 100vw;
+    scroll-snap-align: center;
+    border-radius: 0;
+  }
 }

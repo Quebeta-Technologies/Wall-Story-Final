@@ -6,12 +6,20 @@ import '../styles/gallery.css';
 export default function GalleryCarousel() {
   const [items, setItems] = useState(mockGallery);
   const [lightbox, setLightbox] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
   const trackRef = useRef(null);
 
   useEffect(() => {
     fetchGallery()
       .then((data) => data && data.length && setItems(data))
       .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 700);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
   }, []);
 
   const scrollBy = (dir) => {
@@ -22,7 +30,6 @@ export default function GalleryCarousel() {
     el.scrollBy({ left: dir * step, behavior: 'smooth' });
   };
 
-  // ESC closes lightbox
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'Escape') setLightbox(null);
@@ -41,18 +48,20 @@ export default function GalleryCarousel() {
         </div>
       </div>
 
-      <div className="gallery-controls">
-        <button className="gallery-arrow" onClick={() => scrollBy(-1)} aria-label="Previous">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-        </button>
-        <button className="gallery-arrow" onClick={() => scrollBy(1)} aria-label="Next">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
+      {!isMobile && (
+        <div className="gallery-controls">
+          <button className="gallery-arrow" onClick={() => scrollBy(-1)} aria-label="Previous">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button className="gallery-arrow" onClick={() => scrollBy(1)} aria-label="Next">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      )}
 
       <div className="gallery-track" ref={trackRef}>
         {items.map((g, i) => (
