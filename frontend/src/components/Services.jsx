@@ -108,45 +108,48 @@ export default function Services() {
           <p>Every space is composed piece by piece. Here is the full range of materials, finishes and craft we bring to your home.</p>
         </div>
 
-        <div
-          className="svc-carousel"
-          onTouchStart={isMobile ? onTouchStart : undefined}
-          onTouchEnd={isMobile ? onTouchEnd : undefined}
-        >
-          {!isMobile && (
-            <button className="svc-arrow" onClick={prev} disabled={isAnimating} aria-label="Previous">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <path d="M19 12H5M12 19l-7-7 7-7" />
-              </svg>
-            </button>
-          )}
+        <div className="svc-carousel-outer">
+          <div
+            className="svc-carousel"
+            onTouchStart={isMobile ? onTouchStart : undefined}
+            onTouchEnd={isMobile ? onTouchEnd : undefined}
+          >
+            {!isMobile && (
+              <button className="svc-arrow" onClick={prev} disabled={isAnimating} aria-label="Previous">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+              </button>
+            )}
 
-          <div className="svc-track">
-            {cards.map((ri) => (
-              <div key={ri} className={`svc-card svc-card--${getRole(ri)}`}>
-                <div className="svc-card-img">
-                  <img
-                    src={SERVICE_IMAGES[ri % SERVICE_IMAGES.length]}
-                    alt={services[ri]?.name}
-                    loading="lazy"
-                  />
+            <div className="svc-track">
+              {cards.map((ri) => (
+                <div key={ri} className={`svc-card svc-card--${getRole(ri)}`}>
+                  <div className="svc-card-img">
+                    <img
+                      src={SERVICE_IMAGES[ri % SERVICE_IMAGES.length]}
+                      alt={services[ri]?.name}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="svc-card-body">
+                    <h3 className="service-name">{services[ri]?.name}</h3>
+                    <p className="service-desc">{services[ri]?.description}</p>
+                  </div>
                 </div>
-                <div className="svc-card-body">
-                  <h3 className="service-name">{services[ri]?.name}</h3>
-                  <p className="service-desc">{services[ri]?.description}</p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {!isMobile && (
+              <button className="svc-arrow" onClick={next} disabled={isAnimating} aria-label="Next">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            )}
           </div>
-
-          {!isMobile && (
-            <button className="svc-arrow" onClick={next} disabled={isAnimating} aria-label="Next">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </button>
-          )}
         </div>
+
       </div>
     </section>
   );

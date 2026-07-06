@@ -1,18 +1,24 @@
+/* ── Outer clip wrapper ── */
+.svc-carousel-outer {
+  overflow: hidden;
+  width: 100%;
+}
+
 /* ── Carousel wrapper ── */
 .svc-carousel {
   display: flex;
   align-items: center;
   gap: 16px;
   padding: 10px 0 30px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* ── Track ── */
 .svc-track {
   position: relative;
   flex: 1;
-  height: 300px;
-  overflow: hidden;
+  height: 320px;
+  overflow: visible;
 }
 
 /* ── Base card ── */
@@ -164,7 +170,7 @@
 }
 
 @media (max-width: 600px) {
-  .svc-carousel { gap: 0; }
+  .svc-carousel { gap: 0; padding: 10px 0 10px; }
   .svc-track {
     height: 300px;
     overflow: visible;
