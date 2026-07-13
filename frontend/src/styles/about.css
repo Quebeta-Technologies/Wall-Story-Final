@@ -18,9 +18,7 @@
 }
 .about-visual-img {
   position: absolute; inset: 0;
-  background:
-    linear-gradient(rgba(20,20,20,0.2), rgba(20,20,20,0.35)),
-    url('/about.jpg') center/cover;
+  background: url('/about.jpg') center/cover;
 }
 .about-visual-badge {
   position: absolute;
