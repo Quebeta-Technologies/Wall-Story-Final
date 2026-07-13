@@ -4,16 +4,16 @@ import { mockServices } from '../data/mockData.js';
 import '../styles/services.css';
 
 const SERVICE_IMAGES = [
-  'https://images.unsplash.com/photo-1615529328331-f8917597711f?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1526057565006-20beab8dd2ed?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1541123437800-1bb1317badc2?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&auto=format&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&auto=format&fit=crop&q=80',
+  '/imported wallpapers.jpg',
+  '/Curtain Fabrics.jpg',
+  '/Upholstery.jpg',
+  '/blinds.jpg',
+  '/Artefacts.jpg',
+  '/wooden floring.jpg',
+  '/PVC & SPC Flooring.jpg',
+  '/Artificial Landscaping.jpg',
+  '/Mattress.jpg',
+  '/Automated Curtain Tracks.jpg',
 ];
 
 export default function Services() {
